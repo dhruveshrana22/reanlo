@@ -3,19 +3,46 @@ import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, ScrollView 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SocialBtn from '../Componants/SocialButtons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/UserDetail/Loginaction';
+
 
 const Login = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigation = useNavigation();
+    const [showEmailError, setShowEmailError] = useState(false);
+
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.UserReducer.userArray);
+    console.log("userDetails", userDetails)
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
-
-
     const handleotp = () => {
-        navigation.navigate("otpscreen")
-    }
+        navigation.navigate("otpscreen");
+    };
+
+    const handleLogin = () => {
+        // Check if userDetails is defined
+        if (userDetails) {
+            const foundUser = userDetails.find(user => user.email === email && user.password === password);
+
+            if (foundUser) {
+                dispatch(loginUser(foundUser));
+                navigation.navigate("HomeScreen");
+            } else {
+                // Show email error if user is not found
+                setShowEmailError(true);
+            }
+        } else {
+            console.log("User details are undefined");
+        }
+    };
+
+
     return (
         <View style={{}}>
             <View style={styles.container}>
@@ -35,6 +62,8 @@ const Login = () => {
                             autoCapitalize="none"
                             autoCorrect={true}
                             placeholderTextColor="#555454"
+                            value={email} // Set the value prop
+                            onChangeText={(text) => setEmail(text)} // Set the onChangeText prop
                         />
                     </View>
                     <View style={styles.ViewtextInput}>
@@ -45,6 +74,8 @@ const Login = () => {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor="#555454"
+                            value={password} // Set the value prop
+                            onChangeText={(text) => setPassword(text)} // Set the onChangeText prop
                         />
                         <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
                             <Icon name={isPasswordVisible ? 'eye' : 'eye-slash'} size={20} color="#555454" />
@@ -63,11 +94,14 @@ const Login = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <View style={{ alignItems: 'center', position: 'absolute', bottom: '42%', width: '100%' }}>
 
+                </View>
 
+                    {/* {showEmailError && <LoginEmailErrorbox />} */}
                     {/* Login Button  */}
                     <View style={styles.lgbtncontainer}>
-                        <TouchableOpacity style={styles.touchableOpacitylgbtn} onPress={() => console.log('Log In pressed')}>
+                        <TouchableOpacity style={styles.touchableOpacitylgbtn} onPress={handleLogin}>
                             <Text style={styles.loginText}>Log In</Text>
                         </TouchableOpacity>
                     </View>

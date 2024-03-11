@@ -1,53 +1,64 @@
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Avatar, Icon } from 'react-native-elements';
-import ImagePicker from 'react-native-image-picker';
+import { Avatar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/AntDesign';
+
+import ImagePicker from 'react-native-image-crop-picker'; // Import from 'react-native-image-crop-picker'
 
 const RoundImageUploader = () => {
   const [avatarSource, setAvatarSource] = useState(null);
 
-  const selectImage = () => {
-    const options = {
-      title: 'Select Image',
-      mediaType: 'photo',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
+  const selectImage = async () => {
+    try {
+      const response = await ImagePicker.openPicker({ // Use openPicker instead of launchImageLibrary
+        width: 300,
+        height: 300,
+        cropping: true,
+        mediaType: 'photo',
+      });
 
-    ImagePicker.launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        setAvatarSource({ uri: response.uri });
+      if (response && !response.didCancel) {
+        setAvatarSource({ uri: response.path });
       }
-    });
+    } catch (error) {
+      console.log('ImagePicker Error: ', error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={selectImage} style={styles.avatarContainer}>
         {avatarSource ? (
-          <Image source={avatarSource} style={styles.avatarImage} />
+          <Image source={avatarSource.uri ? { uri: avatarSource.uri } : null} style={styles.avatarImage} />
         ) : (
           <Avatar
             rounded
-            icon={{ name: 'camera', type: 'font-awesome' }}
-            size={80}
-            overlayContainerStyle={{ backgroundColor: 'lightgray' }}
+            size={100}
+            overlayContainerStyle={{ backgroundColor: '#FFE499' }}
+            icon={{ name: 'user-o', size: 40, type: 'font-awesome', color: 'black' }}
+            iconStyle={{ backgroundColor: 'transparent' }}
           />
         )}
       </TouchableOpacity>
-      {avatarSource && (
-        <TouchableOpacity onPress={() => setAvatarSource(null)} style={styles.removeIconContainer}>
-          <Icon name="times-circle" type="font-awesome" color="red" size={20} />
-        </TouchableOpacity>
-      )}
+      <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: 'black',
+            height: 25,
+            width: 25,
+            borderRadius: 50,
+            alignItems: 'center',
+            justifyContent: 'center',
+            top: '77%',
+            left: '54%',
+          }}>
+          <Image source={require('../Image/Downlod.png')} style={styles.imagedg} />
+        </View>
+      </View>
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
@@ -60,10 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 100,
     height: 100,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    overflow: 'hidden',
+   
   },
   avatarImage: {
     width: 100,
@@ -73,6 +81,11 @@ const styles = StyleSheet.create({
   removeIconContainer: {
     marginTop: 10,
   },
+  iconStyle: {
+    backgroundColor: 'transparent', // Make the background transparent
+    // Add any other specific styles to the icon
+  },
+  
 });
 
 export default RoundImageUploader;

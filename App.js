@@ -12,6 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './SRC/redux/Store';
 import EnterOtp from './SRC/Login/OTP/EnterOtp';
 import SignUp from './SRC/Ragister';
+import { UserProvider } from './SRC/redux/UserDetail/userdetail';
 
 const Stack = createStackNavigator();
 
@@ -35,10 +36,12 @@ const App = () => {
   return (
    <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
+    
     <NavigationContainer>
     
     <Auth/>
    </NavigationContainer>
+ 
     </PersistGate>
    </Provider>
   );

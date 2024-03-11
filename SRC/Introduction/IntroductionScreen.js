@@ -44,7 +44,7 @@ const IntroductionScreen = ({ navigation }) => {
     // }
 
     // Instead of the AsyncStorage code, you can directly navigate to the 'intro4' screen
-    navigation.navigate('intro4');
+    navigation.replace('intro4');
   };
 
 

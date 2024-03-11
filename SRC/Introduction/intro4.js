@@ -1,34 +1,35 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, PanResponder, Dimensions } from 'react-native';
 import Login_Ragister_Btn from '../Componants/Login_and_Ragisterbtn';
+import { useNavigation } from '@react-navigation/native';
+
 const { width, height } = Dimensions.get('window');
+
 const introductionScreens = [
   {
     id: 1,
     image: require('../Image/Group2.png'),
     title: 'Discover and Socialize',
-    content:
-      'Stay updated for the latest releases, and discover most recent books.',
+    content: 'Stay updated for the latest releases, and discover most recent books.',
   },
   {
     id: 2,
     image: require('../Image/Group1.png'),
     title: 'Large Book Collection',
-    content:
-      'Historical Novels, Adventure. fiction, fantasy, science, education and others.',
+    content: 'Historical Novels, Adventure, fiction, fantasy, science, education, and others.',
   },
   {
     id: 3,
     image: require('../Image/Group3.png'),
     title: 'Readers Community',
-    content:
-      'join the readers community that shares your love of books and reading.',
+    content: 'Join the readers community that shares your love of books and reading.',
   },
   // Add more screens as needed
 ];
+
 const Intro4 = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const navigation = useNavigation();
 
   const handleSlideChange = (direction) => {
     const newIndex = direction === 'right' ? currentIndex + 1 : currentIndex - 1;
@@ -38,20 +39,20 @@ const Intro4 = () => {
   };
 
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => { },
+    onPanResponderGrant: () => {},
     onPanResponderMove: (_, gestureState) => {
       const { dx } = gestureState;
       if (Math.abs(dx) > 100) {
         handleSlideChange(dx > 0 ? 'left' : 'right');
-        // Reset the panResponder for the next swipe
         panResponder.panHandlers.onResponderRelease();
       }
     },
-    onPanResponderRelease: () => { },
+    onPanResponderRelease: () => {},
   });
+
   const currentScreen = introductionScreens[currentIndex];
 
+  
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <Image style={styles.image} source={require('../Image/Reanlo.png')} />
