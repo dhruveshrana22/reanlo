@@ -5,40 +5,45 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import ImagePicker from 'react-native-image-crop-picker'; // Import from 'react-native-image-crop-picker'
 
-const RoundImageUploader = () => {
+const RoundImageUploader = ({ onImageUpload }) => {
   const [avatarSource, setAvatarSource] = useState(null);
 
   const selectImage = async () => {
     try {
-      const response = await ImagePicker.openPicker({ // Use openPicker instead of launchImageLibrary
+      const response = await ImagePicker.openPicker({
         width: 300,
         height: 300,
         cropping: true,
         mediaType: 'photo',
       });
-
+  
       if (response && !response.didCancel) {
-        setAvatarSource({ uri: response.path });
+        const image = { uri: response.path };
+        setAvatarSource(image);
+        // Call the onImageUpload prop to pass the image data to the parent component
+        onImageUpload(image);
       }
     } catch (error) {
       console.log('ImagePicker Error: ', error);
     }
   };
+  
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={selectImage} style={styles.avatarContainer}>
-        {avatarSource ? (
-          <Image source={avatarSource.uri ? { uri: avatarSource.uri } : null} style={styles.avatarImage} />
-        ) : (
-          <Avatar
-            rounded
-            size={100}
-            overlayContainerStyle={{ backgroundColor: '#FFE499' }}
-            icon={{ name: 'user-o', size: 40, type: 'font-awesome', color: 'black' }}
-            iconStyle={{ backgroundColor: 'transparent' }}
-          />
-        )}
+      {avatarSource ? (
+  <Image source={avatarSource.uri ? { uri: avatarSource.uri } : null} style={styles.avatarImage} />
+) : (
+  <Avatar
+    rounded
+    size={100}
+    overlayContainerStyle={{ backgroundColor: '#FFE499' }}
+    icon={{ name: 'user-o', size: 40, type: 'font-awesome', color: 'black' }}
+    iconStyle={{ backgroundColor: 'transparent' }}
+  />
+)}
+
       </TouchableOpacity>
       <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
         <View

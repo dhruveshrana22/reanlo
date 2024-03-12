@@ -5,6 +5,8 @@ import SocialBtn from '../Componants/SocialButtons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/UserDetail/Loginaction';
+import Loginerror from './loginError/loginerror';
+import LoginPaserror from './loginError/passwordError';
 
 
 const Login = () => {
@@ -13,6 +15,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
     const [showEmailError, setShowEmailError] = useState(false);
+    const [showPassError, setShowPassError] = useState(false);
 
     const dispatch = useDispatch();
     const userDetails = useSelector((state) => state.UserReducer.userArray);
@@ -24,6 +27,9 @@ const Login = () => {
     const handleotp = () => {
         navigation.navigate("otpscreen");
     };
+    const handleforgotpass = () => {
+        navigation.replace("ForgoatPassword");
+    };
 
     const handleLogin = () => {
         // Check if userDetails is defined
@@ -32,15 +38,38 @@ const Login = () => {
 
             if (foundUser) {
                 dispatch(loginUser(foundUser));
-                navigation.navigate("HomeScreen");
+                navigation.replace("Home");
             } else {
-                // Show email error if user is not found
-                setShowEmailError(true);
+                if (email && password) {
+                    setShowEmailError(true);
+                    setShowPassError(true);
+
+                    // Reset errors after 7 seconds
+                    setTimeout(() => {
+                        setShowEmailError(false);
+                        setShowPassError(false);
+                    }, 7000);
+                } else if (email) {
+                    setShowEmailError(true);
+                    setShowPassError(false); // Reset password error
+                    // Reset email error after 7 seconds
+                    setTimeout(() => {
+                        setShowEmailError(false);
+                    }, 7000);
+                } else if (password) {
+                    setShowPassError(true);
+                    setShowEmailError(false); // Reset email error
+                    // Reset password error after 7 seconds
+                    setTimeout(() => {
+                        setShowPassError(false);
+                    }, 7000);
+                }
             }
         } else {
             console.log("User details are undefined");
         }
     };
+
 
 
     return (
@@ -54,7 +83,7 @@ const Login = () => {
             </View>
             <ScrollView>
                 <View style={styles.txtemailcontainer}>
-                    <View style={styles.ViewtextInput}>
+                    <View style={[styles.ViewtextInput, showEmailError && styles.errorBorder]}>
                         <TextInput
                             style={styles.textInput}
                             placeholder="Email"
@@ -66,7 +95,7 @@ const Login = () => {
                             onChangeText={(text) => setEmail(text)} // Set the onChangeText prop
                         />
                     </View>
-                    <View style={styles.ViewtextInput}>
+                    <View style={[styles.ViewtextInput, showPassError && styles.errorBorder]}>
                         <TextInput
                             style={styles.textInput}
                             placeholder="Password"
@@ -82,10 +111,20 @@ const Login = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.Checkcontainer}>
-                        <View style={styles.rememberContainer}>
-                            <Icon name="check" size={20} color="white" style={styles.icon} />
-                            <Text style={styles.rememberText}>Remember me</Text>
-                        </View>
+                        {userDetails && userDetails.find(user => user.email === email && user.password === password) ? (
+                            <View style={styles.rememberContainer}>
+                                <Icon name="check" size={20} color="white" style={styles.icon} />
+                                <Text style={styles.rememberText}>Remember me</Text>
+                            </View>
+                        ) : (
+                            <View style={styles.rememberContainer}>
+                                <TouchableOpacity onPress={handleforgotpass}>
+                                    <Text style={styles.otp}>
+                                        Forgot Password?
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
                         <View style={styles.rememberContainer}>
                             <TouchableOpacity onPress={handleotp}>
                                 <Text style={styles.otp}>
@@ -94,11 +133,8 @@ const Login = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ alignItems: 'center', position: 'absolute', bottom: '42%', width: '100%' }}>
 
-                </View>
 
-                    {/* {showEmailError && <LoginEmailErrorbox />} */}
                     {/* Login Button  */}
                     <View style={styles.lgbtncontainer}>
                         <TouchableOpacity style={styles.touchableOpacitylgbtn} onPress={handleLogin}>
@@ -113,7 +149,15 @@ const Login = () => {
                         <SocialBtn />
                     </View>
                 </View>
+
+
             </ScrollView>
+            <View style={{ flex: 1, alignItems: 'center', position: 'absolute', top: '95%', width: '100%' }}>
+                {showEmailError && <Loginerror />}
+            </View>
+            <View style={{ flex: 1, alignItems: 'center', position: 'absolute', top: '83%', width: '100%' }}>
+                {showPassError && <LoginPaserror />}
+            </View>
             <View style={{ flexDirection: 'row', top: 10, alignItems: 'center', justifyContent: 'center', top: 100 }}>
                 <Text style={{ color: 'black', fontWeight: "700", fontSize: 16 }}>Don't Have a Account ?  </Text>
                 <TouchableOpacity>
@@ -157,7 +201,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     otp: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '700',
         borderBottomWidth: 1,
         borderColor: 'black',
@@ -191,6 +235,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 25,
+    },
+    errorBorder: {
+        borderColor: 'red', // Change border color to red when there's an error
     },
     ViewtextInput: {
         flexDirection: "row",

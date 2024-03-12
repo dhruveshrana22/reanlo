@@ -13,24 +13,13 @@ import { persistor, store } from './SRC/redux/Store';
 import EnterOtp from './SRC/Login/OTP/EnterOtp';
 import SignUp from './SRC/Ragister';
 import { UserProvider } from './SRC/redux/UserDetail/userdetail';
+import ForgotePassword from './SRC/ForgotPassword';
+import ForgotOtp from './SRC/ForgotOtp';
+import Auth from './Navigation/Auth';
 
 const Stack = createStackNavigator();
 
-const Auth = () => {
-  return (
-    
-      <Stack.Navigator initialRouteName="Introduction">
-        <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="intro4" component={Intro4} options={{ headerShown: false }} />
-        <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="otpscreen" component={LoginOtp} options={{ headerShown: false }} />
-        <Stack.Screen name="enterOtp" component={EnterOtp} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-        {/* Add other screens to your stack */}
-      </Stack.Navigator>
-   
-  );
-};
+
 
 const App = () => {
   return (
