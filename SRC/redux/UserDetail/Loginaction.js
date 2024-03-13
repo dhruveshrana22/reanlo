@@ -4,7 +4,9 @@ export const loginUser = (user) => ({
     payload: user,
   });
 
-  
+  export const logoutUser = () => ({
+    type: 'LOGOUT_USER',
+  });
   // userReducer.js
 const initialState = {
     loggedInUser: null,
@@ -18,6 +20,11 @@ const initialState = {
           ...state,
           loggedInUser: action.payload,
         };
+        case 'LOGOUT_USER':
+          return {
+            ...state,
+            loggedInUser: null, // Clear the logged-in user
+          };
       default:
         return state;
     }

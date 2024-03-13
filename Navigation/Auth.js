@@ -12,12 +12,14 @@ import SignUp from '../SRC/Ragister';
 import ForgotePassword from '../SRC/ForgotPassword';
 import ForgotOtp from '../SRC/ForgotOtp';
 import HomeScreen from '../SRC/Home/Homescreen';
+import ProfileScreen from '../SRC/Home/Profile';
 
 
 const Stack = createStackNavigator();
 const IntroductionStack = createStackNavigator();
 const LoginScreenStack = createStackNavigator();
 const SignUpScreenStack = createStackNavigator();
+const HomeScreenStack = createStackNavigator();
 
 const Introductions = ()=>{
     return(
@@ -52,6 +54,15 @@ const SignUpScreen = ()=>{
 
     )
 }
+const HomeScreens = ()=>{
+    return(
+        <HomeScreenStack.Navigator>
+            <HomeScreenStack.Screen  name="Homes" component={HomeScreen} options={{ headerShown: false }} />
+            <HomeScreenStack.Screen  name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        </HomeScreenStack.Navigator>
+
+    )
+}
 
 
 const Auth = () => {
@@ -61,7 +72,7 @@ const Auth = () => {
         <Stack.Screen name="Introduction1" component={Introductions} options={{ headerShown: false }} />
         <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreens} options={{ headerShown: false }} />
         
       </Stack.Navigator>
    

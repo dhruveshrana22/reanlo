@@ -3,14 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ProfileComponent = () => {
+  const navigation= useNavigation();
   const userDetails = useSelector((state) => state.loginReducer.loggedInUser);
-
+const handleProfile =()=>{
+  navigation.replace("Profile")
+}
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleProfile}>
         <Avatar
           size="large"
           rounded
