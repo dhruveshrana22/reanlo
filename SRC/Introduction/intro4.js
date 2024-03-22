@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, PanResponder, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, PanResponder, Dimensions, StatusBar } from 'react-native';
 import Login_Ragister_Btn from '../Componants/Login_and_Ragisterbtn';
 import { useNavigation } from '@react-navigation/native';
 
@@ -39,23 +39,23 @@ const Intro4 = () => {
   };
 
   const panResponder = PanResponder.create({
-    onPanResponderGrant: () => {},
+    onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (_, gestureState) => {
       const { dx } = gestureState;
-      if (Math.abs(dx) > 100) {
+      if (Math.abs(dx) > 50) {
         handleSlideChange(dx > 0 ? 'left' : 'right');
-        panResponder.panHandlers.onResponderRelease();
       }
     },
-    onPanResponderRelease: () => {},
   });
-
   const currentScreen = introductionScreens[currentIndex];
 
   
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Image style={styles.image} source={require('../Image/Reanlo.png')} />
+     
+     <View>
+     <Image style={styles.image} source={require('../Image/Reanlo.png')} />
+     </View>
       <View style={styles.absoluteContainer}>
         {/* ... Other absolute-positioned elements */}
      
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -25 }], // Adjust based on your design
   },
   container: {
+    paddingTop:45,
     flex: 1,
     backgroundColor: 'white',
   },
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     height: 70,
     textAlign:'center',
     justifyContent: 'center',
-    top: 630,
+    top: 620,
     alignItems:'center',
   },
   title: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Outfit',
     fontWeight: '900',
-    lineHeight: 50.8,
+    lineHeight: 45,
     letterSpacing: 0.2,
   },
   subtitle: {
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Outfit',
     fontWeight: '400',
-    lineHeight: 22.4,
+    lineHeight: 20,
     letterSpacing: 0.2,
   },
   dotsContainer: {

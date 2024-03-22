@@ -9,7 +9,7 @@ const SearchBar = () => {
       <TextInput
         style={styles.input}
         placeholder="Search"
-        placeholderTextColor="#888"
+        placeholderTextColor="#616161"
       />
     </View>
   );
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
     borderRadius: 30,
-    padding: 5,
     paddingHorizontal:15
   },
   icon: {

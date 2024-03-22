@@ -1,5 +1,3 @@
-// App.js
-
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,26 +14,22 @@ import { UserProvider } from './SRC/redux/UserDetail/userdetail';
 import ForgotePassword from './SRC/ForgotPassword';
 import ForgotOtp from './SRC/ForgotOtp';
 import Auth from './Navigation/Auth';
+import { StatusBar } from 'react-native'; // Import StatusBar component
 
 const Stack = createStackNavigator();
 
-
-
 const App = () => {
   return (
-   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-    
-    <NavigationContainer>
-    
-    <Auth/>
-   </NavigationContainer>
- 
-    </PersistGate>
-   </Provider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {/* Apply StatusBar component here */}
+        <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
+        <NavigationContainer>
+          <Auth />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 };
-
-
 
 export default App;
