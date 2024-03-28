@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './SRC/redux/Store';
 import EnterOtp from './SRC/Login/OTP/EnterOtp';
-import SignUp from './SRC/Ragister';
+import SignUp from './SRC/Register';
 import { UserProvider } from './SRC/redux/UserDetail/userdetail';
 import ForgotePassword from './SRC/ForgotPassword';
 import ForgotOtp from './SRC/ForgotOtp';
